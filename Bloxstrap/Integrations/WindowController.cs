@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Runtime.InteropServices;
 using System.Drawing;
+using System;
 
 public struct Rect {
    public int Left { get; set; }
@@ -276,7 +277,7 @@ namespace Bloxstrap.Integrations
                     if (windowData.Color is not null) {
                         _lastWindowColor = Convert.ToUInt32(windowData.Color, 16);
                     }
-
+                    
                     if (_lastTransparency == 1)
                     {
                         SetWindowLong(_currentWindow, -20, 0x00000000);
@@ -322,6 +323,11 @@ namespace Bloxstrap.Integrations
         [DllImport("user32.dll")]
         public static extern bool GetWindowRect(IntPtr hwnd, ref Rect rectangle);
 
+        [DllImport("user32.dll")]
+        private static extern IntPtr GetDC(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        private static extern int ReleaseDC(IntPtr hWnd, IntPtr hDC);
         
         [DllImport("user32.dll")]
         static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
